@@ -31,17 +31,22 @@ export const SupplierRiskTab: React.FC = () => {
   }, [dataset]);
 
   // Supplier Concentration Data: % share of monthly consumption (Top 10 + Other)
+  // Uses only the first two words/names of the supplier for cleaner chart labels
   const supplierConcentrationData = useMemo(() => {
     const sorted = [...supplierScorecards].sort((a, b) => b.totalMonthlyCons - a.totalMonthlyCons);
     const top10 = sorted.slice(0, 10);
     const rest = sorted.slice(10);
 
-    const data = top10.map((s) => ({
-      name: s.supplier.length > 20 ? `${s.supplier.slice(0, 18)}...` : s.supplier,
-      fullName: s.supplier,
-      share: Math.round((s.totalMonthlyCons / totalConsumption) * 1000) / 10,
-      volume: s.totalMonthlyCons,
-    }));
+    const data = top10.map((s) => {
+      const words = s.supplier.trim().split(/\s+/).filter(Boolean);
+      const twoNames = words.slice(0, 2).join(' ');
+      return {
+        name: twoNames || s.supplier,
+        fullName: s.supplier,
+        share: Math.round((s.totalMonthlyCons / totalConsumption) * 1000) / 10,
+        volume: s.totalMonthlyCons,
+      };
+    });
 
     if (rest.length > 0) {
       const restVolume = rest.reduce((acc, curr) => acc + curr.totalMonthlyCons, 0);
@@ -195,12 +200,13 @@ export const SupplierRiskTab: React.FC = () => {
                   width={110}
                 />
                 <Tooltip
-                  formatter={(val: unknown, name: unknown, item: unknown) => [
-                    `${Number(val)}% (${Number(
-                      (item as { payload: { volume: number } }).payload.volume
-                    ).toLocaleString()} kg/mo)`,
-                    'Share',
-                  ]}
+                  formatter={(val: unknown, name: unknown, item: unknown) => {
+                    const payload = (item as { payload: { volume: number; fullName?: string; name: string } })?.payload;
+                    return [
+                      `${Number(val)}% (${Number(payload?.volume || 0).toLocaleString()} kg/mo)`,
+                      payload?.fullName || payload?.name || 'Share',
+                    ];
+                  }}
                   contentStyle={{
                     backgroundColor: '#0f172a',
                     borderRadius: '8px',
