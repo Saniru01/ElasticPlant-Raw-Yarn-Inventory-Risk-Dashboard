@@ -25,8 +25,8 @@ const DashboardContent: React.FC = () => {
       {/* Top Application Bar */}
       <Header />
 
-      {/* 5-Tab Navigation Bar */}
-      <TabNav />
+      {/* 5-Tab Navigation Bar - Only visible after data is loaded */}
+      {dataset.length > 0 && <TabNav />}
 
       {/* Main Viewport Content */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6">
@@ -47,7 +47,7 @@ const DashboardContent: React.FC = () => {
       <footer className="mt-auto border-t border-slate-200 bg-white py-4 text-xs text-slate-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="font-semibold text-slate-700">Apex Elastic Industries</span>
+            <span className="font-semibold text-slate-700">Stretchline Global</span>
             <span aria-hidden="true" className="text-slate-300">·</span>
             <span>Raw Yarn Supply Chain & Risk Intelligence</span>
             <span aria-hidden="true" className="text-slate-300">·</span>

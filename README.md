@@ -1,6 +1,6 @@
-# ElasticPlant Raw Yarn Inventory & Risk Executive Dashboard
+# Stretchline Global - Raw Yarn Inventory & Risk Executive Dashboard
 
-A corporate executive dashboard designed for supply chain leadership, plant managers, and procurement buyers at elastic manufacturing plants. 
+A corporate executive dashboard designed for supply chain leadership, plant managers, and procurement buyers at Stretchline Global elastic manufacturing plants. 
 
 The application parses client-side Excel (`.xlsx`, `.xls`) or `.csv` exports of **"Yarn Allocation"** reports, recomputes derived inventory-risk metrics dynamically in the browser, and delivers five operational and executive perspectives.
 

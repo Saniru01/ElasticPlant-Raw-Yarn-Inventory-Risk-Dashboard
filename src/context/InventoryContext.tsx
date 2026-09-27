@@ -125,19 +125,6 @@ export const InventoryProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     pageSize: 10,
   });
 
-  // Pre-load sample data on first launch for instant executive readiness
-  useEffect(() => {
-    const sampleItems = getSampleYarnData();
-    setDataset(sampleItems);
-    setMetadata({
-      fileName: 'Yarn_Allocation_Report_Q3_PlantA.xlsx',
-      fileSize: 42800,
-      uploadedAt: new Date(),
-      rowCount: sampleItems.length,
-      isSample: true,
-    });
-  }, []);
-
   const loadSampleData = () => {
     setIsLoading(true);
     setErrorMessage(null);

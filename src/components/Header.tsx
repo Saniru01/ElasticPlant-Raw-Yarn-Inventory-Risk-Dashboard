@@ -14,6 +14,7 @@ import { MethodologyModal } from './MethodologyModal';
 
 export const Header: React.FC = () => {
   const { 
+    dataset,
     metadata, 
     loadFile, 
     loadSampleData, 
@@ -53,6 +54,8 @@ export const Header: React.FC = () => {
     setIsDragging(false);
   };
 
+  const hasData = dataset.length > 0;
+
   return (
     <>
       <header className="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
@@ -62,19 +65,24 @@ export const Header: React.FC = () => {
             
             {/* Zone 1: Single text element wordmark */}
             <div className="flex items-center gap-3">
-              <a href="#" className="flex items-center gap-2 group">
-                <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white shadow-xs group-hover:bg-indigo-700 transition-colors">
-                  <span className="font-mono font-bold text-sm">EP</span>
+              <a href="#" className="flex items-center gap-2.5 group">
+                <div className="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center text-white shadow-xs group-hover:bg-indigo-600 transition-colors">
+                  <span className="font-mono font-bold text-sm">SG</span>
                 </div>
-                <span className="text-base font-bold tracking-tight text-slate-900 group-hover:text-indigo-600 transition-colors">
-                  ElasticPlant Yarn Inventory
-                </span>
+                <div>
+                  <span className="text-base font-bold tracking-tight text-slate-900 group-hover:text-indigo-600 transition-colors">
+                    Stretchline Global
+                  </span>
+                  <span className="hidden sm:inline-block ml-2 text-xs text-slate-400 font-medium">
+                    Raw Yarn Portal
+                  </span>
+                </div>
               </a>
             </div>
 
             {/* Zone 2: Snapshot metadata */}
             <div className="hidden md:flex items-center gap-2 text-xs text-slate-500 font-medium">
-              {metadata ? (
+              {hasData && metadata && (
                 <div className="flex items-center gap-2">
                   <span className="inline-flex items-center gap-1.5 text-slate-700 font-medium bg-slate-100/80 px-2.5 py-1 rounded-md">
                     <FileSpreadsheet className="w-3.5 h-3.5 text-indigo-600" />
@@ -92,12 +100,10 @@ export const Header: React.FC = () => {
                   <span aria-hidden="true" className="text-slate-300">·</span>
                   <span>{new Date(metadata.uploadedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                 </div>
-              ) : (
-                <div className="text-slate-400 italic">No dataset loaded</div>
               )}
             </div>
 
-            {/* Zone 3: Primary Actions */}
+            {/* Zone 3: Actions */}
             <div className="flex items-center gap-2">
               {/* Hidden file input */}
               <input
@@ -109,32 +115,36 @@ export const Header: React.FC = () => {
                 id="yarn-file-input"
               />
 
-              {/* Upload Button */}
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                disabled={isLoading}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-lg shadow-xs transition-colors whitespace-nowrap disabled:opacity-50"
-              >
-                {isLoading ? (
-                  <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                ) : (
-                  <Upload className="w-3.5 h-3.5" />
-                )}
-                <span>Upload Report (.xlsx/.csv)</span>
-              </button>
+              {hasData && (
+                <>
+                  {/* Upload Button */}
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={isLoading}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 rounded-lg shadow-xs transition-colors whitespace-nowrap disabled:opacity-50"
+                  >
+                    {isLoading ? (
+                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                    ) : (
+                      <Upload className="w-3.5 h-3.5" />
+                    )}
+                    <span>Replace Report</span>
+                  </button>
 
-              {/* Sample Data Button */}
-              <button
-                type="button"
-                onClick={loadSampleData}
-                disabled={isLoading}
-                title="Reload realistic industrial sample data"
-                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg transition-colors whitespace-nowrap"
-              >
-                <RefreshCw className="w-3.5 h-3.5 text-slate-400" />
-                <span>Load Sample</span>
-              </button>
+                  {/* Sample Data Button */}
+                  <button
+                    type="button"
+                    onClick={loadSampleData}
+                    disabled={isLoading}
+                    title="Reload realistic industrial sample data"
+                    className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg transition-colors whitespace-nowrap"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5 text-slate-400" />
+                    <span>Reload Sample</span>
+                  </button>
+                </>
+              )}
 
               {/* Download Template */}
               <button
