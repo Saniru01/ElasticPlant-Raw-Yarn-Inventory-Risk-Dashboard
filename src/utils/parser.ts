@@ -112,8 +112,8 @@ function parseNumber(val: unknown, fallback = 0): number {
   return isNaN(num) ? fallback : num;
 }
 
-export function parseMaterialString(material: string) {
-  const cleanMat = (material || '').trim();
+export function parseMaterialString(material: unknown) {
+  const cleanMat = String(material || '').trim();
   const tokens = cleanMat.split(/[_/\s-]+/).filter(Boolean);
 
   // Category: first token
@@ -170,11 +170,18 @@ export function parseMaterialString(material: string) {
   };
 }
 
-export function computeYarnItem(raw: Partial<YarnItem>, index: number): YarnItem {
-  const id = raw.code ? `${raw.code}-${index}` : `row-${index}`;
-  const supplier = (raw.supplier || 'Unassigned Supplier').trim();
-  const code = (raw.code || `YARN-${1000 + index}`).trim();
-  const material = (raw.material || 'RAW_YARN_UNKNOWN').trim();
+export function computeYarnItem(raw: Record<string, unknown> | Partial<YarnItem>, index: number): YarnItem {
+  const codeRaw = raw.code !== undefined && raw.code !== null && raw.code !== ''
+    ? String(raw.code).trim()
+    : `YARN-${1000 + index}`;
+  const id = `${codeRaw}-${index}`;
+  const supplier = raw.supplier !== undefined && raw.supplier !== null && raw.supplier !== ''
+    ? String(raw.supplier).trim()
+    : 'Unassigned Supplier';
+  const code = codeRaw;
+  const material = raw.material !== undefined && raw.material !== null && raw.material !== ''
+    ? String(raw.material).trim()
+    : 'RAW_YARN_UNKNOWN';
 
   const monthlyAvg = parseNumber(raw.monthlyAvg, 0);
   const balQty = parseNumber(raw.balQty, 0);
@@ -193,7 +200,7 @@ export function computeYarnItem(raw: Partial<YarnItem>, index: number): YarnItem
 
   const allocConfirmed = parseNumber(raw.allocConfirmed, 0);
   const allocProjection = parseNumber(raw.allocProjection, 0);
-  const comments = (raw.comments || '').trim();
+  const comments = raw.comments !== undefined && raw.comments !== null ? String(raw.comments).trim() : '';
 
   // DERIVED CALCULATIONS:
   // totalLT = ep + sml + spl + stt + cl + sil
