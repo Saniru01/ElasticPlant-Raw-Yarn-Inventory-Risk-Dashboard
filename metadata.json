@@ -1,0 +1,6 @@
+{
+  "name": "ElasticPlant Raw Yarn Inventory & Risk Dashboard",
+  "description": "Corporate executive dashboard for raw yarn allocation, inventory-risk metrics, replenishment scheduling, supplier risk, and production insights.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
